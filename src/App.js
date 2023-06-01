@@ -2,13 +2,15 @@ import React from "react";
 import ProductList from "./components/productlist/productlist";
 import Modal from "./components/modal/modal";
 
+import "./App.css";
+
 class App extends React.Component {
   state = {
     products: [],
     cartItems: [],
     favorites: [],
     showModal: false,
-    selectedProduct: null,
+    // selectedProduct: null,
   };
 
   componentDidMount() {
@@ -99,9 +101,18 @@ class App extends React.Component {
   //   }));
   // };
 
+  openModal = (product) => {
+    this.setState({ showModal: true });
+  };
+
+  closeModal = () => {
+    this.setState({ showModal: false });
+  };
+
   render() {
-    const { products, cartItems, favorites, showModal, selectedProduct } =
-      this.state;
+    const { products, cartItems, favorites, showModal } = this.state;
+
+    console.log("showModal:", this.state.showModal);
 
     return (
       <div className="app">
@@ -110,20 +121,28 @@ class App extends React.Component {
           <div className="icons">
             <span className="cart-icon">
               <i className="fas fa-shopping-cart"></i>
+              <img
+                className="backet-image"
+                src={"/image/header/bascket.svg"}
+              ></img>
               <span className="cart-count">{cartItems.length}</span>
             </span>
             <span className="favorites-icon">
               <i className="fas fa-star"></i>
+              <img
+                className="backet-image"
+                src={"/image/header/heart-svgrepo-com.svg"}
+              ></img>
               <span className="favorites-count">{favorites.length}</span>
             </span>
           </div>
         </header>
         <main>
-          {showModal && selectedProduct && (
+          {showModal && (
             <Modal
               header="Add to Cart"
               closeButton={true}
-              text={`Are you sure you want to add ${selectedProduct.name} to your cart?`}
+              text={`Are you sure you want to add to your cart?`}
               actions={
                 <>
                   <button onClick={this.confirmAddToCart}>Confirm</button>
@@ -136,7 +155,7 @@ class App extends React.Component {
           <ProductList
             products={products}
             favorites={favorites}
-            addToCart={this.addToCart}
+            addToCart={this.openModal}
             onToggleFavorite={this.toggleFavorite}
           />
         </main>

@@ -1,57 +1,47 @@
-.overlay {
+.modal {
   position: fixed;
   top: 0;
-  right: 0;
-  bottom: 0;
   left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
   display: flex;
   align-items: center;
   justify-content: center;
-  /* z-index: 98; */
-  height: 100%;
-  width: 100%;
-  background-color: rgba(0, 0, 0, 0.3);
-  z-index: 99;
 }
 
-.modal {
-  position: relative;
-  z-index: 98;
-  width: 100%;
-  max-width: 26rem;
-  max-height: 100%;
+.modal-content {
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 5px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
-.modal-close {
+
+.close-button {
   position: absolute;
-  top: -1.5rem;
-  right: 0;
-  padding: 5px;
-  border: 0;
-  -webkit-appearance: none;
-  background: none;
-  color: white;
+  top: 10px;
+  right: 10px;
+  background-color: transparent;
+  border: none;
+  color: #333;
+  font-size: 20px;
   cursor: pointer;
 }
 
-.modal-body {
-  border-radius: 4px;
-  background-color: #3c5d50;
-  border-radius: 10px;
+.modal-header {
+  font-size: 24px;
+  margin-bottom: 10px;
 }
 
-.modal-body-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  background-color: gray;
-  height: 50px;
+.modal-text {
+  margin-bottom: 20px;
 }
-.modal-body-content {
+
+.modal-actions {
   display: flex;
-  padding: 1.25rem 1.5rem;
+  justify-content: flex-end;
 }
-.modal-body-footer {
-  display: flex;
-  justify-content: center;
-  align-items: center;
+
+.modal-actions button {
+  margin-left: 10px;
 }

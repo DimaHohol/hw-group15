@@ -21,7 +21,10 @@ class ProductCard extends React.Component {
           <p className="product-price">${price}</p>
           <p className="product-article">Article: {article}</p>
           {/* <p className="product-color">Color: {color}</p> */}
-          <button className="add-to-cart-button" onClick={this.props.addToCart}>
+          <button
+            className="add-to-cart-button"
+            onClick={() => this.props.addToCart(this.props.product)}
+          >
             Add to Cart
           </button>
           <button
