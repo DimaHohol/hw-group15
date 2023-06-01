@@ -1,143 +1,127 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import ProductList from "./components/productlist/productlist";
 import Modal from "./components/modal/modal";
 
 import "./App.css";
 
-class App extends React.Component {
-  state = {
-    products: [],
-    cartItems: [],
-    favorites: [],
-    showModal: false,
-    // selectedProduct: null,
-  };
+const App = () => {
+  const [products, setProducts] = useState([]);
+  const [cartItems, setCartItems] = useState([]);
+  const [favorites, setFavorites] = useState([]);
+  const [showModal, setShowModal] = useState(false);
+  const [selectedProduct, setSelectedProduct] = useState(null);
 
-  componentDidMount() {
-    this.fetchProducts();
-    this.fetchFavorites();
-  }
+  useEffect(() => {
+    fetchProducts();
+    fetchFavorites();
+  }, []);
 
-  fetchProducts() {
+  useEffect(() => {
+    localStorage.setItem("cartItems", JSON.stringify(cartItems));
+  }, [cartItems]);
+
+  useEffect(() => {
+    localStorage.setItem("favorites", JSON.stringify(favorites));
+  }, [favorites]);
+
+  const fetchProducts = () => {
     fetch("/data.json")
       .then((response) => response.json())
       .then((data) => {
-        this.setState({ products: data });
-
-        // Retrieve cart items from localStorage
+        setProducts(data);
         const cartItems = localStorage.getItem("cartItems");
         if (cartItems) {
-          this.setState({ cartItems: JSON.parse(cartItems) });
+          setCartItems(JSON.parse(cartItems));
         }
       })
       .catch((error) => {
         console.error("Error fetching products:", error);
       });
-  }
+  };
 
-  fetchFavorites() {
-    // Отримайте дані про обрані товари з localStorage
+  const fetchFavorites = () => {
     const favorites = localStorage.getItem("favorites");
     if (favorites) {
-      this.setState({ favorites: JSON.parse(favorites) });
+      setFavorites(JSON.parse(favorites));
     }
-  }
-
-  addToCart = (product) => {
-    this.setState({ selectedProduct: product, showModal: true });
   };
 
-  confirmAddToCart = () => {
-    const { selectedProduct, cartItems } = this.state;
+  const addToCart = (product) => {
+    setSelectedProduct(product);
+    setShowModal(true);
+  };
+
+  const confirmAddToCart = () => {
     const updatedCartItems = [...cartItems, selectedProduct];
-    this.setState(
-      {
-        cartItems: updatedCartItems,
-        showModal: false,
-        selectedProduct: null,
-      },
-      () => {
-        // Save the changes to localStorage inside the callback
-        localStorage.setItem("cartItems", JSON.stringify(updatedCartItems));
-      }
-    );
+    setCartItems(updatedCartItems);
+    setShowModal(false);
+    setSelectedProduct(null);
   };
 
-  cancelAddToCart = () => {
-    this.setState({ showModal: false, selectedProduct: null });
+  const cancelAddToCart = () => {
+    setShowModal(false);
+    setSelectedProduct(null);
   };
 
-  toggleFavorite = (article) => {
-    const { favorites } = this.state;
+  const toggleFavorite = (article) => {
     const updatedFavorites = favorites.includes(article)
       ? favorites.filter((favArticle) => favArticle !== article)
       : [...favorites, article];
-    this.setState({ favorites: updatedFavorites });
-    // Збережіть зміни в localStorage
-    localStorage.setItem("favorites", JSON.stringify(updatedFavorites));
+    setFavorites(updatedFavorites);
   };
 
-  openModal = (product) => {
-    this.setState({ showModal: true });
+  const openModal = (product) => {
+    setShowModal(true);
   };
 
-  closeModal = () => {
-    this.setState({ showModal: false });
+  const closeModal = () => {
+    setShowModal(false);
   };
 
-  render() {
-    const { products, cartItems, favorites, showModal } = this.state;
-
-    console.log("showModal:", this.state.showModal);
-
-    return (
-      <div className="app">
-        <header>
-          <h1>My Online Store</h1>
-          <div className="icons">
-            <span className="cart-icon">
-              <i className="fas fa-shopping-cart"></i>
-              <img
-                className="backet-image"
-                src={"/image/header/bascket.svg"}
-              ></img>
-              <span className="cart-count">{cartItems.length}</span>
-            </span>
-            <span className="favorites-icon">
-              <i className="fas fa-star"></i>
-              <img
-                className="backet-image"
-                src={"/image/header/heart-svgrepo-com.svg"}
-              ></img>
-              <span className="favorites-count">{favorites.length}</span>
-            </span>
-          </div>
-        </header>
-        <main>
-          {showModal && (
-            <Modal
-              header="Add to Cart"
-              closeButton={true}
-              text={`Are you sure you want to add to your cart?`}
-              actions={
-                <>
-                  <button onClick={this.confirmAddToCart}>Confirm</button>
-                  <button onClick={this.cancelAddToCart}>Cancel</button>
-                </>
-              }
-              onClose={this.cancelAddToCart}
+  return (
+    <div className="app">
+      <header>
+        <h1>My Online Store</h1>
+        <div className="icons">
+          <span className="cart-icon">
+            <i className="fas fa-shopping-cart"></i>
+            <img className="backet-image" src={"/image/header/bascket.svg"} />
+            <span className="cart-count">{cartItems.length}</span>
+          </span>
+          <span className="favorites-icon">
+            <i className="fas fa-star"></i>
+            <img
+              className="backet-image"
+              src={"/image/header/heart-svgrepo-com.svg"}
             />
-          )}
-          <ProductList
-            products={products}
-            favorites={favorites}
-            addToCart={this.openModal}
-            onToggleFavorite={this.toggleFavorite}
+            <span className="favorites-count">{favorites.length}</span>
+          </span>
+        </div>
+      </header>
+      <main>
+        {showModal && (
+          <Modal
+            header="Add to Cart"
+            closeButton={true}
+            text={`Are you sure you want to add to your cart?`}
+            actions={
+              <>
+                <button onClick={confirmAddToCart}>Confirm</button>
+                <button onClick={cancelAddToCart}>Cancel</button>
+              </>
+            }
+            onClose={cancelAddToCart}
           />
-        </main>
-      </div>
-    );
-  }
-}
+        )}
+        <ProductList
+          products={products}
+          favorites={favorites}
+          addToCart={openModal}
+          onToggleFavorite={toggleFavorite}
+        />
+      </main>
+    </div>
+  );
+};
 
 export default App;
