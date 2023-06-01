@@ -1,5 +1,5 @@
 import React from "react";
-
+import PropTypes from "prop-types";
 import "./ProductCard.css";
 
 class ProductCard extends React.Component {
@@ -39,5 +39,15 @@ class ProductCard extends React.Component {
     );
   }
 }
+
+ProductCard.propTypes = {
+  name: PropTypes.string.isRequired,
+  price: PropTypes.number.isRequired,
+  image: PropTypes.string.isRequired,
+  article: PropTypes.string.isRequired,
+  onToggleFavorite: PropTypes.func.isRequired,
+  isFavorite: PropTypes.bool.isRequired,
+  addToCart: PropTypes.func.isRequired,
+};
 
 export default ProductCard;

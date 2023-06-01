@@ -1,4 +1,5 @@
 import React from "react";
+import PropTypes from "prop-types";
 import "./modal.css";
 
 class Modal extends React.Component {
@@ -21,5 +22,17 @@ class Modal extends React.Component {
     );
   }
 }
+
+Modal.propTypes = {
+  header: PropTypes.string.isRequired,
+  closeButton: PropTypes.bool,
+  text: PropTypes.string.isRequired,
+  actions: PropTypes.node.isRequired,
+  onClose: PropTypes.func.isRequired,
+};
+
+Modal.defaultProps = {
+  closeButton: false,
+};
 
 export default Modal;
