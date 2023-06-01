@@ -1,0 +1,94 @@
+[
+  {
+    "name": "Barberton Daisy",
+    "price": 119,
+    "img_url": "/image/plants-img/1.svg",
+    "article": "1",
+    "discount": 10,
+    "isFavorite": false
+  },
+  {
+    "name": "Angel Wing Begonia",
+    "price": 169,
+    "img_url": "/image/plants-img/2.svg",
+    "article": "2",
+    "discount": 5,
+    "isFavorite": false
+  },
+  {
+    "name": "African Violet",
+    "price": 199,
+    "img_url": "/image/plants-img/3.svg",
+    "article": "3",
+    "discount": 5,
+    "isFavorite": false
+  },
+  {
+    "name": "Beach Sparticleer Lily",
+    "price": 129,
+    "img_url": "/image/plants-img/4.svg",
+    "article": "4",
+    "isFavorite": false
+  },
+  {
+    "name": "Blushing Bromeliad",
+    "price": 139,
+    "img_url": "/image/plants-img/5.svg",
+    "article": "5",
+    "isFavorite": false
+  },
+  {
+    "name": "Aluminum Plant",
+    "price": 179,
+    "img_url": "/image/plants-img/6.svg",
+    "article": "6",
+    "isFavorite": false
+  },
+  {
+    "name": "Aluminum Plant",
+    "price": 99,
+    "img_url": "/image/plants-img/7.svg",
+    "article": "7",
+    "discount": 20,
+    "isFavorite": false
+  },
+  {
+    "name": "Broadleaf Lady Palm",
+    "price": 59,
+    "img_url": "/image/plants-img/8.svg",
+    "article": "8",
+    "discount": 15,
+    "isFavorite": false
+  },
+  {
+    "name": "Chinese Evergreen",
+    "price": 39,
+    "img_url": "/image/plants-img/9.svg",
+    "article": "9",
+    "isFavorite": false
+  },
+  {
+    "name": "Barberton Daisy",
+    "price": 119,
+    "img_url": "/image/plants-img/1.svg",
+    "article": "10",
+    "discount": 10,
+    "isFavorite": false
+  },
+  {
+    "name": "Angel Wing Begonia",
+    "price": 169,
+    "img_url": "/image/plants-img/2.svg",
+    "article": "11",
+    "discount": 5,
+    "isFavorite": false
+  },
+  {
+    "name": "African Violet",
+    "price": 199,
+    "img_url": "/image/plants-img/3.svg",
+    "article": "12",
+    "discount": 5,
+    "isFavorite": false
+  }
+]

@@ -1,95 +1,146 @@
-import { React, Component } from "react";
-import "./App.css";
+import React from "react";
+import ProductList from "./components/productlist/productlist";
+import Modal from "./components/modal/modal";
 
-import Button from "./components/button/button";
-import Modal from "./modal/modal";
+class App extends React.Component {
+  state = {
+    products: [],
+    cartItems: [],
+    favorites: [],
+    showModal: false,
+    selectedProduct: null,
+  };
 
-class App extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      Modal1: false,
-      Modal2: false,
-    };
+  componentDidMount() {
+    this.fetchProducts();
+    this.fetchFavorites();
   }
 
-  handleButtonClickOpenModal1 = () => {
-    this.setState({ Modal1: true });
+  fetchProducts() {
+    fetch("/data.json")
+      .then((response) => response.json())
+      .then((data) => {
+        this.setState({ products: data });
+
+        // Retrieve cart items from localStorage
+        const cartItems = localStorage.getItem("cartItems");
+        if (cartItems) {
+          this.setState({ cartItems: JSON.parse(cartItems) });
+        }
+      })
+      .catch((error) => {
+        console.error("Error fetching products:", error);
+      });
+  }
+
+  fetchFavorites() {
+    // Отримайте дані про обрані товари з localStorage
+    const favorites = localStorage.getItem("favorites");
+    if (favorites) {
+      this.setState({ favorites: JSON.parse(favorites) });
+    }
+  }
+
+  addToCart = (product) => {
+    this.setState({ selectedProduct: product, showModal: true });
   };
 
-  handleButtonClickOpenModal2 = () => {
-    this.setState({ Modal2: true });
+  confirmAddToCart = () => {
+    const { selectedProduct, cartItems } = this.state;
+    const updatedCartItems = [...cartItems, selectedProduct];
+    this.setState(
+      {
+        cartItems: updatedCartItems,
+        showModal: false,
+        selectedProduct: null,
+      },
+      () => {
+        // Save the changes to localStorage inside the callback
+        localStorage.setItem("cartItems", JSON.stringify(updatedCartItems));
+      }
+    );
   };
 
-  handleButtonClickCloseModal = () => {
-    this.setState({ Modal1: false, Modal2: false });
+  cancelAddToCart = () => {
+    this.setState({ showModal: false, selectedProduct: null });
   };
+
+  toggleFavorite = (article) => {
+    const { favorites } = this.state;
+    const updatedFavorites = favorites.includes(article)
+      ? favorites.filter((favArticle) => favArticle !== article)
+      : [...favorites, article];
+    this.setState({ favorites: updatedFavorites });
+    // Збережіть зміни в localStorage
+    localStorage.setItem("favorites", JSON.stringify(updatedFavorites));
+  };
+
+  // addToCart = (product) => {
+  //   const { cartItems } = this.state;
+  //   const updatedCartItems = [...cartItems, product];
+  //   this.setState({ cartItems: updatedCartItems });
+  //   // Збережіть зміни в localStorage
+  //   localStorage.setItem("cartItems", JSON.stringify(updatedCartItems));
+  // };
+
+  // toggleFavorite = (article) => {
+  //   const { favorites } = this.state;
+  //   const updatedFavorites = favorites.includes(article)
+  //     ? favorites.filter((favArticle) => favArticle !== article)
+  //     : [...favorites, article];
+  //   this.setState({ favorites: updatedFavorites });
+  //   // Збережіть зміни в localStorage
+  //   localStorage.setItem("favorites", JSON.stringify(updatedFavorites));
+  // };
+
+  // toggleModal = () => {
+  //   this.setState((prevState) => ({
+  //     showModal: !prevState.showModal,
+  //   }));
+  // };
 
   render() {
+    const { products, cartItems, favorites, showModal, selectedProduct } =
+      this.state;
+
     return (
-      <>
-        <div className="App">
-          <h1>Click on this buttons</h1>
-          <Button
-            click={this.handleButtonClickOpenModal1}
-            text={"open first modal"}
-            style={{ backgroundColor: "green" }}
+      <div className="app">
+        <header>
+          <h1>My Online Store</h1>
+          <div className="icons">
+            <span className="cart-icon">
+              <i className="fas fa-shopping-cart"></i>
+              <span className="cart-count">{cartItems.length}</span>
+            </span>
+            <span className="favorites-icon">
+              <i className="fas fa-star"></i>
+              <span className="favorites-count">{favorites.length}</span>
+            </span>
+          </div>
+        </header>
+        <main>
+          {showModal && selectedProduct && (
+            <Modal
+              header="Add to Cart"
+              closeButton={true}
+              text={`Are you sure you want to add ${selectedProduct.name} to your cart?`}
+              actions={
+                <>
+                  <button onClick={this.confirmAddToCart}>Confirm</button>
+                  <button onClick={this.cancelAddToCart}>Cancel</button>
+                </>
+              }
+              onClose={this.cancelAddToCart}
+            />
+          )}
+          <ProductList
+            products={products}
+            favorites={favorites}
+            addToCart={this.addToCart}
+            onToggleFavorite={this.toggleFavorite}
           />
-          <Button
-            click={this.handleButtonClickOpenModal2}
-            text={"open second modal"}
-            style={{ backgroundColor: "red" }}
-          />
-        </div>
-        {this.state.Modal1 && (
-          <Modal
-            header="Are you sure you want to buy?"
-            text="Are you sure you want to add this item to your cart?"
-            actions={
-              <>
-                <Button
-                  style={{ backgroundColor: "green" }}
-                  text="OK"
-                  click={this.handleButtonClickCloseModal}
-                />
-                <Button
-                  style={{ backgroundColor: "green" }}
-                  text="Close"
-                  click={this.handleButtonClickCloseModal}
-                />
-              </>
-            }
-            closeButtonX={
-              <Button text="X" click={this.handleButtonClickCloseModal} />
-            }
-            onClose={this.handleButtonClickCloseModal}
-          />
-        )}
-        {this.state.Modal2 && (
-          <Modal
-            header="Delete item?"
-            text="Are you sure you want to remove an item from your shopping cart?"
-            actions={
-              <>
-                <Button
-                  style={{ backgroundColor: "red" }}
-                  text="OK"
-                  click={this.handleButtonClickCloseModal}
-                />
-                <Button
-                  style={{ backgroundColor: "red" }}
-                  text="Close"
-                  click={this.handleButtonClickCloseModal}
-                />
-              </>
-            }
-            closeButtonX={
-              <Button text="X" click={this.handleButtonClickCloseModal} />
-            }
-            onClose={this.handleButtonClickCloseModal}
-          />
-        )}
-      </>
+        </main>
+      </div>
     );
   }
 }
