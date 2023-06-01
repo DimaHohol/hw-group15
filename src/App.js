@@ -77,30 +77,6 @@ class App extends React.Component {
     localStorage.setItem("favorites", JSON.stringify(updatedFavorites));
   };
 
-  // addToCart = (product) => {
-  //   const { cartItems } = this.state;
-  //   const updatedCartItems = [...cartItems, product];
-  //   this.setState({ cartItems: updatedCartItems });
-  //   // Збережіть зміни в localStorage
-  //   localStorage.setItem("cartItems", JSON.stringify(updatedCartItems));
-  // };
-
-  // toggleFavorite = (article) => {
-  //   const { favorites } = this.state;
-  //   const updatedFavorites = favorites.includes(article)
-  //     ? favorites.filter((favArticle) => favArticle !== article)
-  //     : [...favorites, article];
-  //   this.setState({ favorites: updatedFavorites });
-  //   // Збережіть зміни в localStorage
-  //   localStorage.setItem("favorites", JSON.stringify(updatedFavorites));
-  // };
-
-  // toggleModal = () => {
-  //   this.setState((prevState) => ({
-  //     showModal: !prevState.showModal,
-  //   }));
-  // };
-
   openModal = (product) => {
     this.setState({ showModal: true });
   };
