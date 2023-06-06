@@ -10,6 +10,7 @@ const ProductCard = ({
   onToggleFavorite,
   isFavorite,
   addToCart,
+  product,
 }) => {
   return (
     <div className="product-card-list">
@@ -27,7 +28,7 @@ const ProductCard = ({
         {/* <p className="product-color">Color: {color}</p> */}
         <button
           className="add-to-cart-button"
-          onClick={() => addToCart(article)}
+          onClick={() => addToCart(product)}
         >
           Add to Cart
         </button>

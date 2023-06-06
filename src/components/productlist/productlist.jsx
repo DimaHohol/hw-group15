@@ -8,12 +8,13 @@ const ProductList = ({ products, favorites, addToCart, onToggleFavorite }) => {
     <div className="product-list">
       {products.map((product) => (
         <ProductCard
+          product={product}
           key={Math.random()}
           name={product.name}
           price={product.price}
           image={product.img_url}
           article={product.article}
-          onToggleFavorite={() => onToggleFavorite(product.article)}
+          onToggleFavorite={() => onToggleFavorite(product)}
           isFavorite={favorites.includes(product.article)}
           addToCart={addToCart}
         />

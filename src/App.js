@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import { Routes, Route, Link } from "react-router-dom";
 import ProductList from "./components/productlist/productlist";
 import Modal from "./components/modal/modal";
+import CartPage from "./components/pages/CartPage";
+import FavoritesPage from "./components/pages/FavoritesPage";
 import "./App.css";
 
 const App = () => {
@@ -73,6 +75,20 @@ const App = () => {
     setShowModal(false);
   };
 
+  const removeFromCart = (item) => {
+    const updatedCartItems = cartItems.filter((cartItem) => cartItem !== item);
+    setCartItems(updatedCartItems);
+    localStorage.setItem("cartItems", JSON.stringify(updatedCartItems));
+  };
+
+  const removeFromFavorites = (article) => {
+    const updatedFavorites = favorites.filter(
+      (favArticle) => favArticle !== article
+    );
+    setFavorites(updatedFavorites);
+    localStorage.setItem("favorites", JSON.stringify(updatedFavorites));
+  };
+
   return (
     <div className="app">
       <header>
@@ -122,12 +138,38 @@ const App = () => {
             onClose={cancelAddToCart}
           />
         )}
-        <ProductList
-          products={products}
-          favorites={favorites}
-          addToCart={openModal}
-          onToggleFavorite={toggleFavorite}
-        />
+        <Routes>
+          <Route
+            path="/"
+            element={
+              <ProductList
+                products={products}
+                favorites={favorites}
+                addToCart={addToCart}
+                onToggleFavorite={toggleFavorite}
+              />
+            }
+          />
+          <Route
+            path="/cart"
+            element={
+              <CartPage
+                cartItems={cartItems}
+                favorites={favorites}
+                removeFromCart={removeFromCart}
+              />
+            }
+          />
+          <Route
+            path="/favorites"
+            element={
+              <FavoritesPage
+                favorites={favorites}
+                removeFromFavorites={removeFromFavorites}
+              />
+            }
+          />
+        </Routes>
       </main>
     </div>
   );
