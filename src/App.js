@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { Routes, Route, Link } from "react-router-dom";
 import ProductList from "./components/productlist/productlist";
 import Modal from "./components/modal/modal";
 import "./App.css";
@@ -76,6 +77,17 @@ const App = () => {
     <div className="app">
       <header>
         <h1>My Online Store</h1>
+        <nav>
+          <button className="link">
+            <Link to="/">Головна</Link>
+          </button>
+          <button className="link">
+            <Link to="/cart">Кошик</Link>
+          </button>
+          <button className="link">
+            <Link to="/favorites">Вибране</Link>
+          </button>
+        </nav>
         <div className="icons">
           <span className="cart-icon">
             <i className="fas fa-shopping-cart"></i>
