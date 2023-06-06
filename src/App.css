@@ -10,6 +10,16 @@
   padding: 10%;
 }
 
+.header {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.main-body {
+  display: flex;
+  flex-direction: row;
+}
+
 .backet-image {
   width: 20px;
   height: 20px;

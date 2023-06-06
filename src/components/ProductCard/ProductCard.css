@@ -1,6 +1,8 @@
 .product-card-list {
   display: flex;
   flex-wrap: wrap;
+  width: 350px;
+  height: 450px;
 }
 
 .product-card {
@@ -12,12 +14,12 @@
   height: 400px;
   border: solid;
   margin: 10px;
-  padding: 20px;
 }
 
 .product-image {
   border-radius: 50%;
   width: 100%;
+  max-height: 150px;
   width: 50%;
 }
 
@@ -30,4 +32,8 @@
   color: rgb(255, 153, 0);
   border: solid;
   border-color: black;
+}
+
+.add-to-cart-button {
+  margin: 10px;
 }

@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import ProductList from "./components/productlist/productlist";
 import Modal from "./components/modal/modal";
-
 import "./App.css";
 
 const App = () => {
@@ -16,19 +15,12 @@ const App = () => {
     fetchFavorites();
   }, []);
 
-  useEffect(() => {
-    localStorage.setItem("cartItems", JSON.stringify(cartItems));
-  }, [cartItems]);
-
-  useEffect(() => {
-    localStorage.setItem("favorites", JSON.stringify(favorites));
-  }, [favorites]);
-
   const fetchProducts = () => {
     fetch("/data.json")
       .then((response) => response.json())
       .then((data) => {
         setProducts(data);
+
         const cartItems = localStorage.getItem("cartItems");
         if (cartItems) {
           setCartItems(JSON.parse(cartItems));
@@ -56,6 +48,7 @@ const App = () => {
     setCartItems(updatedCartItems);
     setShowModal(false);
     setSelectedProduct(null);
+    localStorage.setItem("cartItems", JSON.stringify(updatedCartItems));
   };
 
   const cancelAddToCart = () => {
@@ -68,6 +61,7 @@ const App = () => {
       ? favorites.filter((favArticle) => favArticle !== article)
       : [...favorites, article];
     setFavorites(updatedFavorites);
+    localStorage.setItem("favorites", JSON.stringify(updatedFavorites));
   };
 
   const openModal = (product) => {
@@ -85,7 +79,10 @@ const App = () => {
         <div className="icons">
           <span className="cart-icon">
             <i className="fas fa-shopping-cart"></i>
-            <img className="backet-image" src={"/image/header/bascket.svg"} />
+            <img
+              className="backet-image"
+              src={"/image/header/bascket.svg"}
+            ></img>
             <span className="cart-count">{cartItems.length}</span>
           </span>
           <span className="favorites-icon">
@@ -93,7 +90,7 @@ const App = () => {
             <img
               className="backet-image"
               src={"/image/header/heart-svgrepo-com.svg"}
-            />
+            ></img>
             <span className="favorites-count">{favorites.length}</span>
           </span>
         </div>
@@ -103,7 +100,7 @@ const App = () => {
           <Modal
             header="Add to Cart"
             closeButton={true}
-            text={`Are you sure you want to add to your cart?`}
+            text={"Are you sure you want to add to your cart?"}
             actions={
               <>
                 <button onClick={confirmAddToCart}>Confirm</button>
