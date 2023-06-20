@@ -1,9 +1,12 @@
 import React from "react";
 import PropTypes from "prop-types";
 import ProductCard from "../ProductCard/ProductCard";
+import { useSelector } from "react-redux";
 import "./productlist.css";
 
-const ProductList = ({ products, favorites, addToCart, onToggleFavorite }) => {
+const ProductList = ({ favorites, addToCart, onToggleFavorite }) => {
+  const products = useSelector((state) => state.products);
+  console.log(products);
   return (
     <div className="product-list">
       {products.map((product) => (
@@ -32,7 +35,7 @@ ProductList.propTypes = {
       article: PropTypes.string.isRequired,
     })
   ).isRequired,
-  favorites: PropTypes.arrayOf(PropTypes.string.isRequired).isRequired,
+
   addToCart: PropTypes.func.isRequired,
   onToggleFavorite: PropTypes.func.isRequired,
 };

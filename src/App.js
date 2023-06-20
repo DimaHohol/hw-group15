@@ -4,42 +4,23 @@ import ProductList from "./components/productlist/productlist";
 import Modal from "./components/modal/modal";
 import CartPage from "./components/pages/CartPage";
 import FavoritesPage from "./components/pages/FavoritesPage";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchProducts, fetchFavorites } from "./redux/actions";
 import "./App.css";
 
 const App = () => {
-  const [products, setProducts] = useState([]);
-  const [cartItems, setCartItems] = useState([]);
-  const [favorites, setFavorites] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState(null);
 
+  const dispatch = useDispatch();
+  const products = useSelector((state) => state.products);
+  const cartItems = useSelector((state) => state.cartItems);
+  const favorites = useSelector((state) => state.favorites);
+
   useEffect(() => {
-    fetchProducts();
-    fetchFavorites();
-  }, []);
-
-  const fetchProducts = () => {
-    fetch("/data.json")
-      .then((response) => response.json())
-      .then((data) => {
-        setProducts(data);
-
-        const cartItems = localStorage.getItem("cartItems");
-        if (cartItems) {
-          setCartItems(JSON.parse(cartItems));
-        }
-      })
-      .catch((error) => {
-        console.error("Error fetching products:", error);
-      });
-  };
-
-  const fetchFavorites = () => {
-    const favorites = localStorage.getItem("favorites");
-    if (favorites) {
-      setFavorites(JSON.parse(favorites));
-    }
-  };
+    dispatch(fetchProducts());
+    dispatch(fetchFavorites());
+  }, [dispatch]);
 
   const addToCart = (product) => {
     setSelectedProduct(product);
@@ -48,7 +29,7 @@ const App = () => {
 
   const confirmAddToCart = () => {
     const updatedCartItems = [...cartItems, selectedProduct];
-    setCartItems(updatedCartItems);
+    dispatch({ type: "ADD_TO_CART", payload: updatedCartItems });
     setShowModal(false);
     setSelectedProduct(null);
     localStorage.setItem("cartItems", JSON.stringify(updatedCartItems));
@@ -63,11 +44,12 @@ const App = () => {
     const updatedFavorites = favorites.includes(article)
       ? favorites.filter((favArticle) => favArticle !== article)
       : [...favorites, article];
-    setFavorites(updatedFavorites);
+    dispatch({ type: "TOGGLE_FAVORITE", payload: updatedFavorites });
     localStorage.setItem("favorites", JSON.stringify(updatedFavorites));
   };
 
   const openModal = (product) => {
+    setSelectedProduct(product);
     setShowModal(true);
   };
 
@@ -77,7 +59,7 @@ const App = () => {
 
   const removeFromCart = (item) => {
     const updatedCartItems = cartItems.filter((cartItem) => cartItem !== item);
-    setCartItems(updatedCartItems);
+    dispatch({ type: "REMOVE_FROM_CART", payload: updatedCartItems });
     localStorage.setItem("cartItems", JSON.stringify(updatedCartItems));
   };
 
@@ -85,7 +67,7 @@ const App = () => {
     const updatedFavorites = favorites.filter(
       (favArticle) => favArticle !== article
     );
-    setFavorites(updatedFavorites);
+    dispatch({ type: "REMOVE_FROM_FAVORITES", payload: updatedFavorites });
     localStorage.setItem("favorites", JSON.stringify(updatedFavorites));
   };
 
@@ -110,6 +92,7 @@ const App = () => {
             <img
               className="backet-image"
               src={"/image/header/bascket.svg"}
+              alt="Cart"
             ></img>
             <span className="cart-count">{cartItems.length}</span>
           </span>
@@ -118,6 +101,7 @@ const App = () => {
             <img
               className="backet-image"
               src={"/image/header/heart-svgrepo-com.svg"}
+              alt="Favorites"
             ></img>
             <span className="favorites-count">{favorites.length}</span>
           </span>
