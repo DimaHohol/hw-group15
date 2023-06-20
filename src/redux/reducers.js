@@ -4,6 +4,7 @@ const initialState = {
   products: [],
   cartItems: JSON.parse(localStorage.getItem("cartItems")) || [],
   favorites: JSON.parse(localStorage.getItem("favorites")) || [],
+  isModalOpen: false,
 };
 
 const rootReducer = (state = initialState, action) => {
@@ -42,6 +43,11 @@ const rootReducer = (state = initialState, action) => {
       return {
         ...state,
         favorites: updatedFavorites,
+      };
+    case "SET_MODAL_STATE":
+      return {
+        ...state,
+        isModalOpen: action.payload,
       };
     default:
       return state;

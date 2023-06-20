@@ -1,13 +1,28 @@
 import React from "react";
 import PropTypes from "prop-types";
+import { connect } from "react-redux";
+import { setModalState } from "../../redux/actions";
 import "./modal.css";
 
-const Modal = ({ header, closeButton, text, actions, onClose }) => {
+const Modal = ({
+  header,
+  closeButton,
+  text,
+  actions,
+  onClose,
+  isModalOpen,
+}) => {
+  const handleClose = () => {
+    onClose();
+
+    setModalState(false);
+  };
+
   return (
-    <div className="modal">
+    <div className={`modal ${isModalOpen ? "open" : ""}`}>
       <div className="modal-content">
         {closeButton && (
-          <button className="close-button" onClick={onClose}>
+          <button className="close-button" onClick={handleClose}>
             X
           </button>
         )}
@@ -25,10 +40,17 @@ Modal.propTypes = {
   text: PropTypes.string.isRequired,
   actions: PropTypes.node.isRequired,
   onClose: PropTypes.func.isRequired,
+  isModalOpen: PropTypes.bool.isRequired,
 };
 
 Modal.defaultProps = {
   closeButton: false,
 };
 
-export default Modal;
+const mapStateToProps = (state) => {
+  return {
+    isModalOpen: state.isModalOpen,
+  };
+};
+
+export default connect(mapStateToProps, { setModalState })(Modal);
