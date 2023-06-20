@@ -1,92 +1,41 @@
-import React, { useState, useEffect } from "react";
-import { Routes, Route, Link } from "react-router-dom";
-import ProductList from "./components/productlist/productlist";
-import Modal from "./components/modal/modal";
-import CartPage from "./components/pages/CartPage";
-import FavoritesPage from "./components/pages/FavoritesPage";
-import "./App.css";
+import React from "react";
+import { Link } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { addToCart, removeFromCart } from "./redux/actions/cartActions";
+import {
+  addToFavorites,
+  removeFromFavorites,
+} from "./redux/actions/favoritesActions";
+import { openModal, closeModal } from "./redux/actions/modalActions";
 
 const App = () => {
-  const [products, setProducts] = useState([]);
-  const [cartItems, setCartItems] = useState([]);
-  const [favorites, setFavorites] = useState([]);
-  const [showModal, setShowModal] = useState(false);
-  const [selectedProduct, setSelectedProduct] = useState(null);
+  const dispatch = useDispatch();
+  const cartItems = useSelector((state) => state.cartItems);
+  const favorites = useSelector((state) => state.favorites);
+  const showModal = useSelector((state) => state.showModal);
 
-  useEffect(() => {
-    fetchProducts();
-    fetchFavorites();
-  }, []);
-
-  const fetchProducts = () => {
-    fetch("/data.json")
-      .then((response) => response.json())
-      .then((data) => {
-        setProducts(data);
-
-        const cartItems = localStorage.getItem("cartItems");
-        if (cartItems) {
-          setCartItems(JSON.parse(cartItems));
-        }
-      })
-      .catch((error) => {
-        console.error("Error fetching products:", error);
-      });
+  const handleAddToCart = (product) => {
+    dispatch(addToCart(product));
   };
 
-  const fetchFavorites = () => {
-    const favorites = localStorage.getItem("favorites");
-    if (favorites) {
-      setFavorites(JSON.parse(favorites));
-    }
+  const handleRemoveFromCart = (productId) => {
+    dispatch(removeFromCart(productId));
   };
 
-  const addToCart = (product) => {
-    setSelectedProduct(product);
-    setShowModal(true);
+  const handleAddToFavorites = (product) => {
+    dispatch(addToFavorites(product));
   };
 
-  const confirmAddToCart = () => {
-    const updatedCartItems = [...cartItems, selectedProduct];
-    setCartItems(updatedCartItems);
-    setShowModal(false);
-    setSelectedProduct(null);
-    localStorage.setItem("cartItems", JSON.stringify(updatedCartItems));
+  const handleRemoveFromFavorites = (product) => {
+    dispatch(removeFromFavorites(product));
   };
 
-  const cancelAddToCart = () => {
-    setShowModal(false);
-    setSelectedProduct(null);
+  const handleOpenModal = () => {
+    dispatch(openModal());
   };
 
-  const toggleFavorite = (article) => {
-    const updatedFavorites = favorites.includes(article)
-      ? favorites.filter((favArticle) => favArticle !== article)
-      : [...favorites, article];
-    setFavorites(updatedFavorites);
-    localStorage.setItem("favorites", JSON.stringify(updatedFavorites));
-  };
-
-  const openModal = (product) => {
-    setShowModal(true);
-  };
-
-  const closeModal = () => {
-    setShowModal(false);
-  };
-
-  const removeFromCart = (item) => {
-    const updatedCartItems = cartItems.filter((cartItem) => cartItem !== item);
-    setCartItems(updatedCartItems);
-    localStorage.setItem("cartItems", JSON.stringify(updatedCartItems));
-  };
-
-  const removeFromFavorites = (article) => {
-    const updatedFavorites = favorites.filter(
-      (favArticle) => favArticle !== article
-    );
-    setFavorites(updatedFavorites);
-    localStorage.setItem("favorites", JSON.stringify(updatedFavorites));
+  const handleCloseModal = () => {
+    dispatch(closeModal());
   };
 
   return (
@@ -143,10 +92,9 @@ const App = () => {
             path="/"
             element={
               <ProductList
-                products={products}
                 favorites={favorites}
-                addToCart={addToCart}
-                onToggleFavorite={toggleFavorite}
+                addToCart={addToCartHandler}
+                onToggleFavorite={toggleFavoriteHandler}
               />
             }
           />
@@ -155,8 +103,7 @@ const App = () => {
             element={
               <CartPage
                 cartItems={cartItems}
-                favorites={favorites}
-                removeFromCart={removeFromCart}
+                removeFromCart={removeFromCartHandler}
               />
             }
           />
@@ -165,11 +112,13 @@ const App = () => {
             element={
               <FavoritesPage
                 favorites={favorites}
-                removeFromFavorites={removeFromFavorites}
+                removeFromFavorites={removeFromFavoritesHandler}
               />
             }
           />
         </Routes>
+        // Остальной код... Попробуйте использовать этот обновленный код и
+        проверьте, исчезают ли ошибки, с которыми вы столкнулись.
       </main>
     </div>
   );

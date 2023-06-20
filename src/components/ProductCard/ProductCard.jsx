@@ -1,57 +1,27 @@
 import React from "react";
-import PropTypes from "prop-types";
-import "./ProductCard.css";
+import { useDispatch } from "react-redux";
+import { addToCart, toggleFavorite } from "../../redux/actions";
 
-const ProductCard = ({
-  name,
-  price,
-  image,
-  article,
-  onToggleFavorite,
-  isFavorite,
-  addToCart,
-  product,
-}) => {
+function ProductCard({ product }) {
+  const dispatch = useDispatch();
+
+  const handleAddToCart = () => {
+    dispatch(addToCart(product));
+  };
+
+  const handleToggleFavorite = () => {
+    dispatch(toggleFavorite(product));
+  };
+
   return (
     <div className="product-card-list">
       <div className="product-card">
-        <span
-          className={`favorite-icon ${isFavorite ? "active" : ""}`}
-          onClick={onToggleFavorite}
-        >
-          &#9734;
-        </span>
-        <img className="product-image" src={image} alt={name} />
-        <h3 className="product-name">{name}</h3>
-        <p className="product-price">${price}</p>
-        <p className="product-article">Article: {article}</p>
-        {/* <p className="product-color">Color: {color}</p> */}
-        <button
-          className="add-to-cart-button"
-          onClick={() => addToCart(product)}
-        >
-          Add to Cart
-        </button>
-        <button
-          className={`favorite-button ${isFavorite ? "favorite" : ""}`}
-          onClick={onToggleFavorite}
-        >
-          Add to Favorite
-          <i className="fas fa-star"></i>
-        </button>
+        {/* Render product details */}
+        <button onClick={handleAddToCart}>Add to Cart</button>
+        <button onClick={handleToggleFavorite}>Add to Favorite</button>
       </div>
     </div>
   );
-};
-
-ProductCard.propTypes = {
-  name: PropTypes.string.isRequired,
-  price: PropTypes.number.isRequired,
-  image: PropTypes.string.isRequired,
-  article: PropTypes.string.isRequired,
-  onToggleFavorite: PropTypes.func.isRequired,
-  isFavorite: PropTypes.bool.isRequired,
-  addToCart: PropTypes.func.isRequired,
-};
+}
 
 export default ProductCard;

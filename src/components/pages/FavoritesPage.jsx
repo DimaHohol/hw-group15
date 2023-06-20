@@ -1,41 +1,34 @@
 import React from "react";
-import PropTypes from "prop-types";
-import "../ProductCard/ProductCard.css";
+import { useSelector, useDispatch } from "react-redux";
+import { removeFromFavorites } from "../../redux/actions";
 
-const FavoritesPage = ({ favorites, removeFromFavorites }) => {
-  const handleRemoveFromFavorites = (item) => {
-    removeFromFavorites(item);
+function FavoritesPage() {
+  const favorites = useSelector((state) => state.favorites);
+  const dispatch = useDispatch();
+
+  const removeFromFavoritesHandler = (article) => {
+    dispatch(removeFromFavorites(article));
   };
 
   return (
     <div>
-      <h2>Favorites:</h2>
-      <ul>
-        {favorites.map((item, index) => (
-          <div className="product-card" key={index}>
-            <span className="favorite-icon active">
-              &#9733; товар у списку улюблених
-            </span>
-            <img className="product-image" src={item.img_url} alt={item.name} />
-            <h3 className="product-name">{item.name}</h3>
-            <p className="product-price">${item.price}</p>
-            <p className="product-article">Article: {item.article}</p>
-            <button
-              className="remove-button"
-              onClick={() => handleRemoveFromFavorites(item)}
-            >
-              Видалити зі списку улюблених
-            </button>
-          </div>
-        ))}
-      </ul>
+      <h2>Favorites</h2>
+      {favorites.length === 0 ? (
+        <p>You have no favorites yet.</p>
+      ) : (
+        <ul>
+          {favorites.map((article) => (
+            <li key={article.id}>
+              {article.title}{" "}
+              <button onClick={() => removeFromFavorites(article)}>
+                Remove
+              </button>
+            </li>
+          ))}
+        </ul>
+      )}
     </div>
   );
-};
-
-FavoritesPage.propTypes = {
-  favorites: PropTypes.array.isRequired,
-  removeFromFavorites: PropTypes.func.isRequired,
-};
+}
 
 export default FavoritesPage;

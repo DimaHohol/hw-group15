@@ -1,13 +1,19 @@
 import React from "react";
-import PropTypes from "prop-types";
-import "./modal.css";
+import { useDispatch } from "react-redux";
+import { closeModal } from "../../redux/actions/modalActions";
 
-const Modal = ({ header, closeButton, text, actions, onClose }) => {
+const Modal = ({ header, closeButton, text, actions }) => {
+  const dispatch = useDispatch();
+
+  const handleCloseModal = () => {
+    dispatch(closeModal());
+  };
+
   return (
     <div className="modal">
       <div className="modal-content">
         {closeButton && (
-          <button className="close-button" onClick={onClose}>
+          <button className="close-button" onClick={handleCloseModal}>
             X
           </button>
         )}
@@ -17,18 +23,6 @@ const Modal = ({ header, closeButton, text, actions, onClose }) => {
       </div>
     </div>
   );
-};
-
-Modal.propTypes = {
-  header: PropTypes.string.isRequired,
-  closeButton: PropTypes.bool,
-  text: PropTypes.string.isRequired,
-  actions: PropTypes.node.isRequired,
-  onClose: PropTypes.func.isRequired,
-};
-
-Modal.defaultProps = {
-  closeButton: false,
 };
 
 export default Modal;

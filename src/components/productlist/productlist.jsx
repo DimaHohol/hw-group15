@@ -1,40 +1,40 @@
 import React from "react";
-import PropTypes from "prop-types";
+import { useSelector, useDispatch } from "react-redux";
+import { addToCart, toggleFavorite } from "../../redux/actions/cartActions";
 import ProductCard from "../ProductCard/ProductCard";
 import "./productlist.css";
 
-const ProductList = ({ products, favorites, addToCart, onToggleFavorite }) => {
+const ProductList = () => {
+  const products = useSelector((state) => state.products);
+  const favorites = useSelector((state) => state.favorites);
+  const cartItems = useSelector((state) => state.cartItems);
+  const dispatch = useDispatch();
+
+  const handleAddToCart = (product) => {
+    addToCart(product);
+  };
+
+  const handleToggleFavorite = (product) => {
+    dispatch(toggleFavorite(product));
+  };
+
   return (
     <div className="product-list">
       {products.map((product) => (
         <ProductCard
+          key={product.id}
           product={product}
-          key={Math.random()}
           name={product.name}
           price={product.price}
           image={product.img_url}
           article={product.article}
-          onToggleFavorite={() => onToggleFavorite(product)}
+          onToggleFavorite={() => handleToggleFavorite(product)}
           isFavorite={favorites.includes(product.article)}
-          addToCart={addToCart}
+          addToCart={() => handleAddToCart(product)}
         />
       ))}
     </div>
   );
-};
-
-ProductList.propTypes = {
-  products: PropTypes.arrayOf(
-    PropTypes.shape({
-      name: PropTypes.string.isRequired,
-      price: PropTypes.number.isRequired,
-      img_url: PropTypes.string.isRequired,
-      article: PropTypes.string.isRequired,
-    })
-  ).isRequired,
-  favorites: PropTypes.arrayOf(PropTypes.string.isRequired).isRequired,
-  addToCart: PropTypes.func.isRequired,
-  onToggleFavorite: PropTypes.func.isRequired,
 };
 
 export default ProductList;
