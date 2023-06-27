@@ -1,4 +1,8 @@
 import React, { useState } from "react";
+import { Formik, Form, Field, ErrorMessage, resetForm } from "formik";
+import * as Yup from "yup";
+import { useDispatch, useSelector } from "react-redux";
+import { clearCart, getCartItems } from "../../redux/actions";
 import PropTypes from "prop-types";
 import "../ProductCard/ProductCard.css";
 import Modal from "../modal/modal";
@@ -6,6 +10,26 @@ import Modal from "../modal/modal";
 const CartPage = ({ cartItems, favorites, removeFromCart }) => {
   const [showModal, setShowModal] = useState(false);
   const [selectedItem, setSelectedItem] = useState(null);
+
+  const dispatch = useDispatch();
+
+  const handleSubmit = (values, { resetForm }) => {
+    console.log(
+      "Придбані товари:",
+      JSON.parse(localStorage.getItem("cartItems"))
+    );
+    console.log("Дані форми:", values);
+    dispatch(clearCart());
+    resetForm();
+  };
+
+  const validationSchema = Yup.object().shape({
+    firstName: Yup.string().required("Обов'язкове поле"),
+    lastName: Yup.string().required("Обов'язкове поле"),
+    age: Yup.number().required("Обов'язкове поле"),
+    address: Yup.string().required("Обов'язкове поле"),
+    phone: Yup.string().required("Обов'язкове поле"),
+  });
 
   const openModal = (item) => {
     setSelectedItem(item);
@@ -25,8 +49,64 @@ const CartPage = ({ cartItems, favorites, removeFromCart }) => {
     }
   };
 
+  const isItemFavorite = (item) => {
+    return favorites.includes(item.article);
+  };
+
   return (
     <div>
+      <div>
+        <h1>Кошик</h1>
+        <Formik
+          initialValues={{
+            firstName: "",
+            lastName: "",
+            age: "",
+            address: "",
+            phone: "",
+          }}
+          validationSchema={validationSchema}
+          onSubmit={handleSubmit}
+        >
+          <Form>
+            <div>
+              <label htmlFor="firstName">Ім'я:</label>
+              <Field type="text" id="firstName" name="firstName" />
+              <ErrorMessage
+                name="firstName"
+                component="div"
+                className="error"
+              />
+            </div>
+
+            <div>
+              <label htmlFor="lastName">Прізвище:</label>
+              <Field type="text" id="lastName" name="lastName" />
+              <ErrorMessage name="lastName" component="div" className="error" />
+            </div>
+
+            <div>
+              <label htmlFor="age">Вік:</label>
+              <Field type="number" id="age" name="age" />
+              <ErrorMessage name="age" component="div" className="error" />
+            </div>
+
+            <div>
+              <label htmlFor="address">Адреса доставки:</label>
+              <Field type="text" id="address" name="address" />
+              <ErrorMessage name="address" component="div" className="error" />
+            </div>
+
+            <div>
+              <label htmlFor="phone">Мобільний телефон:</label>
+              <Field type="text" id="phone" name="phone" />
+              <ErrorMessage name="phone" component="div" className="error" />
+            </div>
+
+            <button type="submit">Checkout</button>
+          </Form>
+        </Formik>
+      </div>
       <h2>Cart Items:</h2>
       <ul>
         {cartItems.map((item, index) => (

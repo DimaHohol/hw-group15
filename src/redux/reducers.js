@@ -1,5 +1,3 @@
-// src/redux/reducers.js
-
 const initialState = {
   products: [],
   cartItems: JSON.parse(localStorage.getItem("cartItems")) || [],
@@ -49,6 +47,27 @@ const rootReducer = (state = initialState, action) => {
         ...state,
         isModalOpen: action.payload,
       };
+    case "UPDATE_CART_ITEMS":
+      return {
+        ...state,
+        cartItems: action.payload,
+      };
+
+    case "CLEAR_CART":
+      localStorage.removeItem("cartItems");
+      return {
+        ...state,
+        cartItems: [],
+      };
+
+    case "CLEAR_CART":
+      return {
+        ...state,
+        cartItems: [],
+      };
+    case "GET_CART_ITEMS":
+      return state.cartItems;
+
     default:
       return state;
   }

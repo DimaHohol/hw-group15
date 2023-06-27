@@ -55,3 +55,21 @@ export const setModalStateAction = (isOpen) => ({
   type: "SET_MODAL_STATE",
   payload: isOpen,
 });
+
+export const clearCartAction = () => {
+  return {
+    type: "CLEAR_CART",
+  };
+};
+//
+export const clearCart = () => {
+  return {
+    type: "CLEAR_CART",
+  };
+};
+
+export const getCartItems = () => {
+  return {
+    type: "GET_CART_ITEMS",
+  };
+};
