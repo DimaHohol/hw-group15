@@ -7,35 +7,36 @@ import "./productlist.css";
 const ProductList = ({ favorites, addToCart, onToggleFavorite }) => {
   const products = useSelector((state) => state.products);
 
+  const isFavorite = (article) => {
+    if (Array.isArray(favorites)) {
+      return favorites.includes(article);
+    }
+    return false;
+  };
+
   return (
     <div className="product-list">
-      {products.map((product) => (
-        <ProductCard
-          product={product}
-          key={Math.random()}
-          name={product.name}
-          price={product.price}
-          image={product.img_url}
-          article={product.article}
-          onToggleFavorite={() => onToggleFavorite(product)}
-          isFavorite={favorites.includes(product.article)}
-          addToCart={addToCart}
-        />
-      ))}
+      {products.map((product) => {
+        return (
+          <ProductCard
+            product={product}
+            key={product.article}
+            name={product.name}
+            price={product.price}
+            image={product.img_url}
+            article={product.article}
+            onToggleFavorite={() => onToggleFavorite(product)}
+            isFavorite={favorites.includes(product.article)}
+            addToCart={addToCart}
+          />
+        );
+      })}
     </div>
   );
 };
 
 ProductList.propTypes = {
-  products: PropTypes.arrayOf(
-    PropTypes.shape({
-      name: PropTypes.string.isRequired,
-      price: PropTypes.number.isRequired,
-      img_url: PropTypes.string.isRequired,
-      article: PropTypes.string.isRequired,
-    })
-  ).isRequired,
-
+  favorites: PropTypes.arrayOf(PropTypes.string).isRequired,
   addToCart: PropTypes.func.isRequired,
   onToggleFavorite: PropTypes.func.isRequired,
 };

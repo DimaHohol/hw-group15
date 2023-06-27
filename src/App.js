@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { Routes, Route, Link } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchProducts, fetchFavorites } from "./redux/actions";
 import ProductList from "./components/productlist/productlist";
 import Modal from "./components/modal/modal";
 import CartPage from "./components/pages/CartPage";
 import FavoritesPage from "./components/pages/FavoritesPage";
-import { useDispatch, useSelector } from "react-redux";
-import { fetchProducts, fetchFavorites } from "./redux/actions";
 import "./App.css";
 
 const App = () => {
@@ -41,9 +41,14 @@ const App = () => {
   };
 
   const toggleFavorite = (article) => {
-    const updatedFavorites = favorites.includes(article)
-      ? favorites.filter((favArticle) => favArticle !== article)
-      : [...favorites, article];
+    let updatedFavorites;
+    if (favorites === null) {
+      updatedFavorites = [article];
+    } else {
+      updatedFavorites = favorites.includes(article)
+        ? favorites.filter((favArticle) => favArticle !== article)
+        : [...favorites, article];
+    }
     dispatch({ type: "TOGGLE_FAVORITE", payload: updatedFavorites });
     localStorage.setItem("favorites", JSON.stringify(updatedFavorites));
   };
