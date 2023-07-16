@@ -1,39 +1,29 @@
-// react-hw-group15/hw-group15/src/components/productlist/productlist.jsx
-
-import React from "react";
-import PropTypes from "prop-types";
+import React, { useContext } from "react";
+import { ViewModeContext } from "../../context/ViewContext";
 import ProductCard from "../ProductCard/ProductCard";
-import { useSelector } from "react-redux";
-import "./productlist.css";
+import "../ProductCard/ProductCard.css";
 
-const ProductList = ({ favorites, addToCart, onToggleFavorite }) => {
-  const products = useSelector((state) => state.products);
+const ProductList = ({ products, favorites, addToCart }) => {
+  const { viewMode, toggleViewMode } = useContext(ViewModeContext);
+
+  const productCards = products.map((product) => (
+    <ProductCard
+      key={product.id}
+      product={product}
+      favorites={favorites}
+      addToCart={addToCart}
+      viewMode={viewMode}
+    />
+  ));
 
   return (
-    <div className="product-list">
-      {products.map((product) => {
-        return (
-          <ProductCard
-            product={product}
-            key={product.article}
-            name={product.name}
-            price={product.price}
-            image={product.img_url}
-            article={product.article}
-            onToggleFavorite={() => onToggleFavorite(product)}
-            isFavorite={favorites.includes(product.article)}
-            addToCart={addToCart}
-          />
-        );
-      })}
+    <div>
+      <button onClick={toggleViewMode}>
+        {viewMode === "card" ? "Switch to table view" : "Switch to card view"}
+      </button>
+      <div className={`product-list ${viewMode}`}>{productCards}</div>
     </div>
   );
-};
-
-ProductList.propTypes = {
-  favorites: PropTypes.arrayOf(PropTypes.string).isRequired,
-  addToCart: PropTypes.func.isRequired,
-  onToggleFavorite: PropTypes.func.isRequired,
 };
 
 export default ProductList;
