@@ -1,3 +1,5 @@
+// react-hw-group15/hw-group15/src/components/productlist/productlist.jsx
+
 import React from "react";
 import PropTypes from "prop-types";
 import ProductCard from "../ProductCard/ProductCard";
@@ -6,13 +8,6 @@ import "./productlist.css";
 
 const ProductList = ({ favorites, addToCart, onToggleFavorite }) => {
   const products = useSelector((state) => state.products);
-
-  const isFavorite = (article) => {
-    if (Array.isArray(favorites)) {
-      return favorites.includes(article);
-    }
-    return false;
-  };
 
   return (
     <div className="product-list">

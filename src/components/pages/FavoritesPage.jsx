@@ -1,3 +1,5 @@
+// react-hw-group15/hw-group15/src/components/pages/FavoritesPage.jsx
+
 import React from "react";
 import PropTypes from "prop-types";
 import "../ProductCard/ProductCard.css";

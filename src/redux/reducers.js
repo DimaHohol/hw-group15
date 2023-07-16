@@ -1,3 +1,5 @@
+// react-hw-group15/hw-group15/src/redux/reducers.js
+
 const initialState = {
   products: [],
   cartItems: JSON.parse(localStorage.getItem("cartItems")) || [],

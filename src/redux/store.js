@@ -1,3 +1,5 @@
+// react-hw-group15/hw-group15/src/redux/store.js
+
 import { createStore, applyMiddleware } from "redux";
 import thunk from "redux-thunk";
 import rootReducer from "./reducers";

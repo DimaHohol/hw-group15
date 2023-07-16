@@ -1,3 +1,5 @@
+// react-hw-group15/hw-group15/src/redux/actions.js
+
 export const fetchProducts = () => {
   return (dispatch) => {
     fetch("/data.json")
@@ -35,6 +37,11 @@ export const addToCart = (product) => ({
   payload: product,
 });
 
+export const addToFavorites = (product) => ({
+  type: "ADD_TO_FAVORITES",
+  payload: product,
+});
+
 export const removeFromCart = (product) => ({
   type: "REMOVE_FROM_CART",
   payload: product,
@@ -61,7 +68,7 @@ export const clearCartAction = () => {
     type: "CLEAR_CART",
   };
 };
-//
+
 export const clearCart = () => {
   return {
     type: "CLEAR_CART",
