@@ -1,0 +1,30 @@
+import React from "react";
+import { render } from "@testing-library/react";
+import Button from "../components/button/button";
+import renderer from "react-test-renderer";
+import modal from "../components/modal/modal";
+
+
+it("renders correctly", () => {
+  const tree = renderer
+    .create(<Button text="Click me" click={() => {}} />)
+    .toJSON();
+  expect(tree).toMatchSnapshot();
+});
+
+
+it("renders correctly", () => {
+  const tree = renderer
+    .create(
+      <Modal
+        header="Modal Header"
+        closeButton={true}
+        text="Modal text"
+        actions={<button>Close</button>}
+        onClose={() => {}}
+        isModalOpen={true}
+      />
+    )
+    .toJSON();
+  expect(tree).toMatchSnapshot();
+});

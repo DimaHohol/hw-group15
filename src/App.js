@@ -8,6 +8,7 @@ import ProductList from "./components/productlist/productlist";
 import Modal from "./components/modal/modal";
 import CartPage from "./components/pages/CartPage";
 import FavoritesPage from "./components/pages/FavoritesPage";
+import { ViewModeProvider } from "../src/context/ViewContext";
 import "./App.css";
 
 const App = () => {
@@ -40,28 +41,6 @@ const App = () => {
   const cancelAddToCart = () => {
     setShowModal(false);
     setSelectedProduct(null);
-  };
-
-  const toggleFavorite = (article) => {
-    let updatedFavorites;
-    if (favorites === null) {
-      updatedFavorites = [article];
-    } else {
-      updatedFavorites = favorites.includes(article)
-        ? favorites.filter((favArticle) => favArticle !== article)
-        : [...favorites, article];
-    }
-    dispatch({ type: "TOGGLE_FAVORITE", payload: updatedFavorites });
-    localStorage.setItem("favorites", JSON.stringify(updatedFavorites));
-  };
-
-  const openModal = (product) => {
-    setSelectedProduct(product);
-    setShowModal(true);
-  };
-
-  const closeModal = () => {
-    setShowModal(false);
   };
 
   const removeFromCart = (item) => {
@@ -133,12 +112,13 @@ const App = () => {
           <Route
             path="/"
             element={
-              <ProductList
-                products={products}
-                favorites={favorites}
-                addToCart={addToCart}
-                onToggleFavorite={toggleFavorite}
-              />
+              <ViewModeProvider>
+                <ProductList
+                  products={products}
+                  favorites={favorites}
+                  addToCart={addToCart}
+                />
+              </ViewModeProvider>
             }
           />
           <Route
